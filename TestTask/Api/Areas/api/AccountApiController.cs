@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Areas.api;
 
 [Area("api")]
+[Route("api/account/[action]")]
 public class AccountApiController : ControllerBase
 {
     private readonly IAccountManager _manager;
@@ -15,12 +16,23 @@ public class AccountApiController : ControllerBase
     }
     
     [HttpPost]
-    [Route("api/account/[action]")]
-    public IActionResult Register(RegisterRequestModel model)
+    public async Task<IActionResult> Register(RegisterRequestModel model)
     {
         if (model.Password != model.PasswordConfirm)
             return BadRequest();
-        _manager.Register(model);
-        return Ok();
+        var response = await _manager.Register(model);
+        return Ok(response);
     }
+
+    [HttpPost]
+    public IActionResult Login(LoginRequestModel model)
+    {
+        var response = _manager.Authenticate(model);
+
+        if (response == null)
+            return BadRequest(new { message = "Username or password is incorrect" });
+
+        return Ok(response);
+    }
+    
 }

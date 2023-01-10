@@ -1,8 +1,11 @@
+using Dal.Entities;
 using Logic.Models;
 
 namespace Logic.Interfaces;
 
 public interface IAccountManager
 {
-    void Register(RegisterRequestModel model);
+    Task<AuthenticateResponse> Register(RegisterRequestModel model);
+    User GetById(int userId);
+    public AuthenticateResponse Authenticate(LoginRequestModel model);
 }
