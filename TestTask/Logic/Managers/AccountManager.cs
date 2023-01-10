@@ -22,7 +22,7 @@ public class AccountManager : IAccountManager
         _mapper = mapper;
     }
     
-    public AuthenticateResponse Authenticate(LoginRequestModel model)
+    public AuthenticateResponse? Authenticate(LoginRequestModel model)
     {
         var user = _userRepository
             .GetAll()
@@ -30,7 +30,8 @@ public class AccountManager : IAccountManager
 
         if (user == null)
             return null;
-            
+        user.LastLogin = DateTime.UtcNow;
+        _userRepository.UpdateAsync(user);          
 
         var token = GenerateJwtToken(user);
         return new AuthenticateResponse(user, token);
@@ -41,7 +42,7 @@ public class AccountManager : IAccountManager
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    public async Task<AuthenticateResponse> Register(RegisterRequestModel model)
+    public async Task<AuthenticateResponse?> Register(RegisterRequestModel model)
     {
         var userModel = _mapper.Map<User>(model);
         var addedUser = await _userRepository.AddAsync(userModel);
@@ -59,7 +60,7 @@ public class AccountManager : IAccountManager
     {
         return _userRepository.GetById(userId);
     }
-    
+
     private string GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

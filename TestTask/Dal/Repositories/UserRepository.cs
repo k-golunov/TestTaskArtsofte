@@ -26,4 +26,12 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
         return result.Entity.Id;
     }
+
+    public async Task<int> UpdateAsync(User user)
+    {
+        var result = _context.Set<User>().FirstOrDefault(x => x.Id == user.Id);
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+        return user.Id;
+    }
 }
