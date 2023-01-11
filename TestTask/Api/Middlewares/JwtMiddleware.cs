@@ -36,7 +36,7 @@ public class JwtMiddleware
     /// Check token validation
     /// </summary>
     /// <param name="context">HttpContext</param>
-    /// <param name="userManager">manager for user</param>
+    /// <param name="accountManager">manager for user</param>
     /// <param name="token">jwt access token</param>
     public void AttachUserToContext(HttpContext context, IAccountManager accountManager, string token)
     {

@@ -1,0 +1,20 @@
+@model Logic.Models.RegisterRequestModel
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<form method="post">
+    <h1>Регистрация</h1>
+    <input type="text" value="ФИО" asp-for="@Model.FIO" name="FIO" id="FIO">
+    <input type="text" value="Телефон" asp-for="@Model.Phone" name="Phone" id="Phone">
+    <input type="text" value="Почта" asp-for="@Model.Email" name="Email" id="Email">
+    <input type="text" value="Пароль" asp-for="@Model.Password" name="Password" id="Password">
+    <input type="text" value="Повторите пароль" asp-for="@Model.PasswordConfirm" name="PasswordConfirm" id="PasswordConfirm">
+    <input type="submit" value="Отправить"/>
+</form>
+</body>
+</html>

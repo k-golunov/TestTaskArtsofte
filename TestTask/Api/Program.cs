@@ -5,12 +5,15 @@ using Dal.Repositories;
 using Logic.Interfaces;
 using Logic.Managers;
 using Logic.Profiles;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -19,13 +22,19 @@ builder.Services.AddDbContext<DataContext>(opt =>
 builder.Services.AddScoped<IAccountManager, AccountManager>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(typeof(UserProfile));
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+//     {
+//
+//     });
 
 var app = builder.Build();
 
@@ -49,6 +58,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.UseMiddleware<JwtMiddleware>();
 app.MapControllerRoute(

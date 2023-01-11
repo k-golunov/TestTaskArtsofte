@@ -1,0 +1,23 @@
+@model Logic.Models.LoginRequestModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+<div>
+    <form method="post">
+        <h1>Вход</h1>
+        <input type="text" value="Телефон" asp-for="@Model.Phone" name="Phone" id="Phone">
+        <input type="text" value="Пароль" asp-for="@Model.Password" name="Password" id="Password">
+        <input type="submit" value="Отправить"/>
+    </form>
+</div>
+</body>
+</html>
