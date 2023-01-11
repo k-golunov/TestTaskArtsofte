@@ -1,8 +1,9 @@
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using Api.Attributes;
 using Logic.Interfaces;
 using Logic.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -39,6 +40,7 @@ public class AccountController : Controller
         {
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + response.AccessToken);
         }*/
+        
         return RedirectToAction("RegisterSuccess", "Account", model);
     }
 
@@ -46,11 +48,8 @@ public class AccountController : Controller
     public IActionResult Login(LoginRequestModel model)
     {
         var response = _manager.Authenticate(model);
-        var baseAddress = new Uri("https://localhost:44319/");
-        using (var httpClient = new HttpClient {BaseAddress = baseAddress})
-        {
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + response.AccessToken);
-        }
+        // var a = HttpContext.Request.Cookies.TryGetValue("access_token", out var login);
+        HttpContext.Response.Cookies.Append("access_token", response.AccessToken);
         return RedirectToAction("Register", "Account");
     }
 
@@ -78,6 +77,7 @@ public class AccountController : Controller
         return Content("yes");
     }
     
+    [Authorize]
     [HttpGet]
     public IActionResult Test2()
     {

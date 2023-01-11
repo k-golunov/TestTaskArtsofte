@@ -23,8 +23,15 @@ public class JwtMiddleware
     /// <param name="accountManager">jwt access token</param>
     public async Task Invoke(HttpContext context, IAccountManager accountManager)
     {
+        // if we use api we need check headers for authorize
         var token1 = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ");
         var token = token1?.Last();
+        
+        // if we use view we need check cookies for authorize
+        if (token == null)
+        {
+            context.Request.Cookies.TryGetValue("access_token", out token);
+        }
 
         if (token != null)
             AttachUserToContext(context, accountManager, token);
