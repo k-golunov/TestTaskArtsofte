@@ -55,6 +55,10 @@ public class AccountApiController : ControllerBase
         return Ok(cabinet);
     }
 
+    /// <summary>
+    /// Not work(
+    /// </summary>
+    /// <returns></returns>
     [Authorize]
     [HttpGet]
     public IActionResult Logout()

@@ -51,7 +51,7 @@ public class AccountController : Controller
         var response = _manager.Authenticate(model);
         // var a = HttpContext.Request.Cookies.TryGetValue("access_token", out var login);
         HttpContext.Response.Cookies.Append("access_token", response.AccessToken);
-        return RedirectToAction("Cabinet", "Account");
+        return RedirectToAction("Cabinet", "Cabinet");
     }
 
     [HttpGet]
@@ -85,18 +85,4 @@ public class AccountController : Controller
         return Content("no");
     }
 
-    [Authorize]
-    [HttpGet]
-    public IActionResult Cabinet()
-    {
-        var user = (User) HttpContext.Items["User"];
-        var cabinet = new CabinetModel
-        {
-            FIO = user.FIO,
-            Email = user.Email,
-            LastLogin = user.LastLogin,
-            Phone = user.Phone
-        };
-        return View(cabinet);
-    }
 }

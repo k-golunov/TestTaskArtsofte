@@ -25,8 +25,4 @@
       <ProjectReference Include="..\Logic\Logic.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Pages" />
-    </ItemGroup>
-
 </Project>
