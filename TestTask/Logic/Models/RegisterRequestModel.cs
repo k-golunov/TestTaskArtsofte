@@ -16,5 +16,6 @@ public class RegisterRequestModel
     [StringLength(20, ErrorMessage = "Слишком длинный пароль")]
     public string Password { get; set; }
     [StringLength(20, ErrorMessage = "Слишком длинный пароль")]
+    [Compare("Password", ErrorMessage = "Пароли не совпадают")]
     public string PasswordConfirm { get; set; }
 }
