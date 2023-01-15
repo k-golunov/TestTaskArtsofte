@@ -66,10 +66,8 @@ public class AccountManager : IAccountManager
     /// </summary>
     /// <param name="userId">user id</param>
     /// <returns>User entity</returns>
-    public User GetById(int userId)
-    {
-        return _userRepository.GetById(userId);
-    }
+    public User GetById(int userId) => _userRepository.GetById(userId);
+    
 
     /// <summary>
     /// Generate new JWT token for authorize
@@ -97,4 +95,6 @@ public class AccountManager : IAccountManager
         var cabinet = _mapper.Map<CabinetModel>(user);
         return cabinet;
     }
+    
+    public User GetByPhone(string phone) => _userRepository.GetByPhone(phone);
 }

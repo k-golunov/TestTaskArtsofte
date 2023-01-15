@@ -9,4 +9,5 @@ public interface IUserRepository
     List<User> GetAll();
     Task<int> AddAsync(User user);
     public Task<int> UpdateAsync(User user);
+    public User GetByPhone(string phone);
 }
