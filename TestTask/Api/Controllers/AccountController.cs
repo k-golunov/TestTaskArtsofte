@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Api.Attributes;
+using Dal.Entities;
 using Logic.Interfaces;
 using Logic.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -88,6 +89,14 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Cabinet()
     {
-        return View();
+        var user = (User) HttpContext.Items["User"];
+        var cabinet = new CabinetModel
+        {
+            FIO = user.FIO,
+            Email = user.Email,
+            LastLogin = user.LastLogin,
+            Phone = user.Phone
+        };
+        return View(cabinet);
     }
 }

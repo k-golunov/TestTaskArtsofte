@@ -3,6 +3,7 @@ using Dal.Entities;
 using Logic.Interfaces;
 using Logic.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace Api.Areas.api;
 
@@ -43,7 +44,7 @@ public class AccountApiController : ControllerBase
     public IActionResult GetMyInfo()
     {
         var user = (User) HttpContext.Items["User"];
-        var cabinet = new CabinetModel()
+        var cabinet = new CabinetModel
         {
             FIO = user.FIO,
             Email = user.Email,
@@ -53,5 +54,12 @@ public class AccountApiController : ControllerBase
         
         return Ok(cabinet);
     }
-    
+
+    [Authorize]
+    [HttpGet]
+    public IActionResult Logout()
+    {
+        HttpContext.Request.Headers["Authorization"] = StringValues.Empty;
+        return Ok();
+    }
 }

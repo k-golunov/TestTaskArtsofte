@@ -17,5 +17,11 @@ public class UserProfile : Profile
             .ForMember(dst => dst.LastLogin, opt => opt.MapFrom(src=> DateTime.UtcNow))
 
             ;
+        CreateMap<User, CabinetModel>()
+            .ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dst => dst.Phone, opt => opt.MapFrom(src => src.Phone))
+            .ForMember(dst => dst.FIO, opt => opt.MapFrom(src => src.FIO))
+            .ForMember(dst => dst.LastLogin, opt => opt.MapFrom(src => src.LastLogin))
+            ;
     }
 }

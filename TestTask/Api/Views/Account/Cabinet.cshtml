@@ -1,4 +1,4 @@
-@model dynamic
+@model Logic.Models.CabinetModel
 
 @{
     Layout = null;
@@ -12,7 +12,11 @@
 </head>
 <body>
 <div>
-      <h1>Ваш кабинет)</h1>
+    <h1>Ваш кабинет)</h1>
+    <p>@Model.FIO</p>
+    <p>@Model.Phone</p>
+    <p>@Model.Email</p>
+    <p>@Model.LastLogin</p>
 </div>
 </body>
 </html>

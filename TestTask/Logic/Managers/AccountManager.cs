@@ -76,8 +76,10 @@ public class AccountManager : IAccountManager
         return tokenHandler.WriteToken(token);
     }
 
-    private void GetInfo(int userId)
+    private CabinetModel GetInfo(int userId)
     {
         var user = GetById(userId);
+        var cabinet = _mapper.Map<CabinetModel>(user);
+        return cabinet;
     }
 }
