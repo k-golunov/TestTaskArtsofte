@@ -23,4 +23,13 @@ public class CabinetController : Controller
         };
         return View(cabinet);
     }
+
+    [Authorize]
+    [HttpGet]
+    [Route("logout")]
+    public IActionResult Logout()
+    {
+        HttpContext.Response.Cookies.Delete("access_token"); 
+        return RedirectToAction("Login", "Account");
+    }
 }
