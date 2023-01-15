@@ -2,6 +2,11 @@ using Dal.Entities;
 
 namespace Logic.Models;
 
+/// <summary>
+/// Model for authenticate response
+/// id - user Id
+/// AccessToken - Generate JWT token in AccountManager
+/// </summary>
 public class AuthenticateResponse
 {
     public int Id { get; set; }

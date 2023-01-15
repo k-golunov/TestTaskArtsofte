@@ -22,6 +22,11 @@ public class AccountManager : IAccountManager
         _mapper = mapper;
     }
     
+    /// <summary>
+    /// Authenticate user and update Last Login
+    /// </summary>
+    /// <param name="model">model for login user (Phone, Password)</param>
+    /// <returns>AuthenticateResponse</returns>
     public AuthenticateResponse? Authenticate(LoginRequestModel model)
     {
         var user = _userRepository
@@ -40,8 +45,8 @@ public class AccountManager : IAccountManager
     /// <summary>
     /// Register user and create AuthenticateResponse with method Authenticate
     /// </summary>
-    /// <param name="model"></param>
-    /// <returns></returns>
+    /// <param name="model">model with data for register (FIO, Phone, Email, Password)</param>
+    /// <returns>task AuthenticateResponse</returns>
     public async Task<AuthenticateResponse?> Register(RegisterRequestModel model)
     {
         var userModel = _mapper.Map<User>(model);
@@ -56,11 +61,21 @@ public class AccountManager : IAccountManager
         return response;
     }
 
+    /// <summary>
+    /// Get user by id
+    /// </summary>
+    /// <param name="userId">user id</param>
+    /// <returns>User entity</returns>
     public User GetById(int userId)
     {
         return _userRepository.GetById(userId);
     }
 
+    /// <summary>
+    /// Generate new JWT token for authorize
+    /// </summary>
+    /// <param name="user">user entity</param>
+    /// <returns>string JWT token</returns>
     private string GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

@@ -8,6 +8,10 @@ namespace Api.Controllers;
 [Route("")]
 public class CabinetController : Controller
 {
+    /// <summary>
+    /// View cabinet page
+    /// </summary>
+    /// <returns>user info (FIO, Email, Phone, Last Login) and url for logout</returns>
     [Authorize]
     [HttpGet]
     [Route("cabinet")]

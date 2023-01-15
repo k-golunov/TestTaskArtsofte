@@ -18,6 +18,11 @@ public class AccountApiController : ControllerBase
         _manager = manager;
     }
     
+    /// <summary>
+    /// Register user use RegisterRequestModel
+    /// </summary>
+    /// <param name="model">model with data for register (FIO, Phone, Email, Password)</param>
+    /// <returns>AuthenticateResponse with Id, Email, Access token</returns>
     [HttpPost]
     public async Task<IActionResult> Register(RegisterRequestModel model)
     {
@@ -27,6 +32,11 @@ public class AccountApiController : ControllerBase
         return Ok(response);
     }
 
+    /// <summary>
+    /// Login user use LoginRequestModel
+    /// </summary>
+    /// <param name="model">model for login user (Phone, Password)</param>
+    /// <returns>AuthenticateResponse with Id, Email, Access token</returns>
     [HttpPost]
     public IActionResult Login(LoginRequestModel model)
     {
@@ -38,6 +48,10 @@ public class AccountApiController : ControllerBase
         return Ok(response);
     }
 
+    /// <summary>
+    /// Get info about user
+    /// </summary>
+    /// <returns>user`s info (FIO, Phone, Email, Last Login)</returns>
     [Authorize]
     [HttpGet]
     // [Route("get-my-info")]
@@ -57,6 +71,7 @@ public class AccountApiController : ControllerBase
 
     /// <summary>
     /// Not work(
+    /// Kills an authorized session
     /// </summary>
     /// <returns></returns>
     [Authorize]

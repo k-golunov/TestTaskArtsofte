@@ -6,6 +6,8 @@ using Dal.Entities;
 using Logic.Interfaces;
 using Logic.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers;
 
@@ -20,6 +22,10 @@ public class AccountController : Controller
         _httpClient = new HttpClient();
     }
     
+    /// <summary>
+    /// Get view for register user
+    /// </summary>
+    /// <returns>view with register page</returns>
     [HttpGet]
     public IActionResult Register()
     {
@@ -27,9 +33,18 @@ public class AccountController : Controller
         return View();
     }
 
+    /// <summary>
+    /// Accepts RegisterRequestmodel for register user
+    /// </summary>
+    /// <param name="model">model with data for register (FIO, Phone, Email, Password)</param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> Register(RegisterRequestModel model)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
         var response = await _manager.Register(model);
         // HttpContext.User.AddIdentity(new ClaimsIdentity(response.AccessToken));
         // HttpContext.Request.Headers["Authorization"] = "Bearer " + response.AccessToken;
@@ -45,6 +60,12 @@ public class AccountController : Controller
         return RedirectToAction("RegisterSuccess", "Account", model);
     }
 
+    /// <summary>
+    /// Accepts LoginRequestModel for login user
+    /// also add access token in cookies for authorization session
+    /// </summary>
+    /// <param name="model">model for login user (Phone, Password)</param>
+    /// <returns>Redirect to cabinet page</returns>
     [HttpPost]
     public IActionResult Login(LoginRequestModel model)
     {
@@ -54,6 +75,10 @@ public class AccountController : Controller
         return RedirectToAction("Cabinet", "Cabinet");
     }
 
+    /// <summary>
+    /// Get view for login user
+    /// </summary>
+    /// <returns>view login page</returns>
     [HttpGet]
     public IActionResult Login()
     {
@@ -65,24 +90,15 @@ public class AccountController : Controller
         return View();
     }
 
+    /// <summary>
+    /// View page register success with fio and URL to open the login page
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpGet]
     public IActionResult RegisterSuccess(RegisterRequestModel model)
     {
         ViewData["Fio"] = model.FIO;
         return View();
     }
-
-    [HttpGet]
-    public IActionResult Test()
-    {
-        return Content("yes");
-    }
-    
-    [Authorize]
-    [HttpGet]
-    public IActionResult Test2()
-    {
-        return Content("no");
-    }
-
 }
