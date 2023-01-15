@@ -1,3 +1,5 @@
+using Api.Attributes;
+using Dal.Entities;
 using Logic.Interfaces;
 using Logic.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,23 @@ public class AccountApiController : ControllerBase
             return BadRequest(new { message = "Username or password is incorrect" });
 
         return Ok(response);
+    }
+
+    [Authorize]
+    [HttpGet]
+    // [Route("get-my-info")]
+    public IActionResult GetMyInfo()
+    {
+        var user = (User) HttpContext.Items["User"];
+        var cabinet = new CabinetModel()
+        {
+            FIO = user.FIO,
+            Email = user.Email,
+            LastLogin = user.LastLogin,
+            Phone = user.Phone
+        };
+        
+        return Ok(cabinet);
     }
     
 }

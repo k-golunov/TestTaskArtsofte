@@ -75,4 +75,9 @@ public class AccountManager : IAccountManager
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
+
+    private void GetInfo(int userId)
+    {
+        var user = GetById(userId);
+    }
 }

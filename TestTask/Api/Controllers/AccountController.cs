@@ -50,13 +50,13 @@ public class AccountController : Controller
         var response = _manager.Authenticate(model);
         // var a = HttpContext.Request.Cookies.TryGetValue("access_token", out var login);
         HttpContext.Response.Cookies.Append("access_token", response.AccessToken);
-        return RedirectToAction("Register", "Account");
+        return RedirectToAction("Cabinet", "Account");
     }
 
     [HttpGet]
     public IActionResult Login()
     {
-        var baseAddress = new Uri("https://localhost:44319/");
+        var baseAddress = new Uri("https://localhost:7075/");
         using (var httpClient = new HttpClient {BaseAddress = baseAddress})
         {
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer 1");
@@ -82,5 +82,12 @@ public class AccountController : Controller
     public IActionResult Test2()
     {
         return Content("no");
+    }
+
+    [Authorize]
+    [HttpGet]
+    public IActionResult Cabinet()
+    {
+        return View();
     }
 }

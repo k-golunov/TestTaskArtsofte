@@ -63,7 +63,9 @@ public class JwtMiddleware
             var jwtToken = (JwtSecurityToken)validatedToken;
             var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "UserId").Value);
 
-            context.Items["User"] = accountManager.GetById(userId);
+            var user = accountManager.GetById(userId);
+            user.Password = "***";
+            context.Items["User"] = user;
         }
         catch
         {
