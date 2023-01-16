@@ -76,13 +76,8 @@ public class AccountApiController : ControllerBase
     public IActionResult GetMyInfo()
     {
         var user = (User) HttpContext.Items["User"];
-        var cabinet = new CabinetModel
-        {
-            FIO = user.FIO,
-            Email = user.Email,
-            LastLogin = user.LastLogin,
-            Phone = user.Phone
-        };
+        var id = user.Id; 
+        var cabinet = _manager.GetInfo(id);
         
         return Ok(cabinet);
     }

@@ -29,6 +29,7 @@ public class AccountManager : IAccountManager
     /// <returns>AuthenticateResponse</returns>
     public AuthenticateResponse? Authenticate(LoginRequestModel model)
     {
+        // hash password!
         var user = _userRepository
             .GetAll()
             .FirstOrDefault(x => x.Phone == model.Phone && x.Password == model.Password);
@@ -49,6 +50,7 @@ public class AccountManager : IAccountManager
     /// <returns>task AuthenticateResponse</returns>
     public async Task<AuthenticateResponse?> Register(RegisterRequestModel model)
     {
+        // hash password!
         var userModel = _mapper.Map<User>(model);
         var addedUser = await _userRepository.AddAsync(userModel);
             
@@ -89,7 +91,7 @@ public class AccountManager : IAccountManager
         return tokenHandler.WriteToken(token);
     }
 
-    private CabinetModel GetInfo(int userId)
+    public CabinetModel GetInfo(int userId)
     {
         var user = GetById(userId);
         var cabinet = _mapper.Map<CabinetModel>(user);

@@ -9,7 +9,7 @@ public class PhoneAttribute : ValidationAttribute
     public override bool IsValid(object? value)
     {
         var r = new Regex(@"^7\d");
-        if (string.IsNullOrEmpty(value.ToString()))
+        if (value == null || string.IsNullOrEmpty(value.ToString()))
             return false;
         return r.Match((string)value).Success;
     }

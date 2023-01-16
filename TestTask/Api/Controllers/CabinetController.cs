@@ -1,5 +1,6 @@
 using Api.Attributes;
 using Dal.Entities;
+using Logic.Interfaces;
 using Logic.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,13 @@ namespace Api.Controllers;
 [Route("")]
 public class CabinetController : Controller
 {
+    private readonly IAccountManager _manager;
+    private readonly ILogger<CabinetController> _logger;
+    public CabinetController(IAccountManager manager, ILogger<CabinetController> logger)
+    {
+        _manager = manager;
+        _logger = logger;
+    }
     /// <summary>
     /// View cabinet page
     /// </summary>
@@ -18,13 +26,8 @@ public class CabinetController : Controller
     public IActionResult Cabinet()
     {
         var user = (User) HttpContext.Items["User"];
-        var cabinet = new CabinetModel
-        {
-            FIO = user.FIO,
-            Email = user.Email,
-            LastLogin = user.LastLogin,
-            Phone = user.Phone
-        };
+        var id = user.Id; 
+        var cabinet = _manager.GetInfo(id);
         return View(cabinet);
     }
 

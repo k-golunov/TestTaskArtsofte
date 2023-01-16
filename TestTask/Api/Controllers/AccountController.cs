@@ -8,18 +8,20 @@ using Logic.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Serilog.Context;
 
 namespace Api.Controllers;
 
 public class AccountController : Controller
 {
     private readonly IAccountManager _manager;
-    private readonly HttpClient _httpClient;
+    private readonly ILogger<AccountController> _logger;
 
-    public AccountController(IAccountManager manager)
+    public AccountController(IAccountManager manager, ILogger<AccountController> logger)
     {
         _manager = manager;
-        _httpClient = new HttpClient();
+        _logger = logger;
+        LogContext.PushProperty("Source", "AccountController");
     }
     
     /// <summary>
@@ -43,6 +45,7 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid)
         {
+            _logger.LogInformation("one or more field is invalid");
             return View(model);
         }
         var response = await _manager.Register(model);
@@ -69,6 +72,11 @@ public class AccountController : Controller
     [HttpPost]
     public IActionResult Login(LoginRequestModel model)
     {
+        if (!ModelState.IsValid)
+        {
+            _logger.LogInformation("one or more field is invalid");
+            return View(model);
+        }
         var response = _manager.Authenticate(model);
         // var a = HttpContext.Request.Cookies.TryGetValue("access_token", out var login);
         HttpContext.Response.Cookies.Append("access_token", response.AccessToken);

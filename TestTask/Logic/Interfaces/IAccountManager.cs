@@ -9,4 +9,5 @@ public interface IAccountManager
     User GetById(int userId);
     public AuthenticateResponse Authenticate(LoginRequestModel model);
     public User GetByPhone(string phone);
+    public CabinetModel GetInfo(int userId);
 }
