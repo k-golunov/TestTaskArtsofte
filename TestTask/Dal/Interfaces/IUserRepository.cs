@@ -5,9 +5,10 @@ namespace Dal.Interfaces;
 public interface IUserRepository
 {
     void Add(User user);
-    User GetById(int id);
+    User? GetById(int id);
     List<User> GetAll();
     Task<int> AddAsync(User user);
-    public Task<int> UpdateAsync(User user);
-    public User GetByPhone(string phone);
+    Task<int> UpdateAsync(User user);
+    User? GetByPhone(string phone);
+    User? GetByEmail(string phone);
 }

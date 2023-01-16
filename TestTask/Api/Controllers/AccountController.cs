@@ -49,7 +49,12 @@ public class AccountController : Controller
             return View(model);
         }
         var response = await _manager.Register(model);
-        // HttpContext.User.AddIdentity(new ClaimsIdentity(response.AccessToken));
+        if (response == null)
+        {
+            _logger.LogInformation("phone or email already used");
+            return View(model);
+        }
+            // HttpContext.User.AddIdentity(new ClaimsIdentity(response.AccessToken));
         // HttpContext.Request.Headers["Authorization"] = "Bearer " + response.AccessToken;
         // return RegisterSuccess(model.FIO);
         // _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.AccessToken);

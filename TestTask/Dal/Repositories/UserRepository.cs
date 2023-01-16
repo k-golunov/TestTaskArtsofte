@@ -16,9 +16,11 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public User GetById(int id) => _context.Users.FirstOrDefault(u => u.Id == id);
+    public User? GetById(int id) => _context.Users.FirstOrDefault(u => u.Id == id);
     
-    public User GetByPhone(string phone) => _context.Users.FirstOrDefault(u => u.Phone == phone);
+    public User? GetByPhone(string phone) => _context.Users.FirstOrDefault(u => u.Phone == phone);
+    
+    public User? GetByEmail(string email) => _context.Users.FirstOrDefault(u => u.Email == email);
     
     public List<User> GetAll() => _context.Set<User>().ToList();
     

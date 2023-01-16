@@ -50,6 +50,8 @@ public class AccountManager : IAccountManager
     /// <returns>task AuthenticateResponse</returns>
     public async Task<AuthenticateResponse?> Register(RegisterRequestModel model)
     {
+        if (!IsUseEmailOrPhone(model.Email, model.Phone))
+            return null;
         // hash password!
         var userModel = _mapper.Map<User>(model);
         var addedUser = await _userRepository.AddAsync(userModel);
@@ -99,4 +101,7 @@ public class AccountManager : IAccountManager
     }
     
     public User GetByPhone(string phone) => _userRepository.GetByPhone(phone);
+
+    public bool IsUseEmailOrPhone(string email, string phone) => _userRepository.GetByPhone(phone) == null && _userRepository.GetByEmail(email) == null;
+    
 }
