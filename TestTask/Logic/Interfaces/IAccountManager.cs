@@ -10,5 +10,4 @@ public interface IAccountManager
     public AuthenticateResponse Authenticate(LoginRequestModel model);
     public User GetByPhone(string phone);
     public CabinetModel GetInfo(int userId);
-    bool IsUseEmailOrPhone(string email, string phone);
 }

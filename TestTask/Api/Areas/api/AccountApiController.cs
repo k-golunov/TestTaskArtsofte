@@ -92,6 +92,7 @@ public class AccountApiController : ControllerBase
     public IActionResult Logout()
     {
         var user = (User) HttpContext.Items["User"];
+        HttpContext.Response.Cookies.Append("logout", "true");
         _logger.LogInformation($"User with phone {user.Phone} logout");
         HttpContext.Request.Headers["Authorization"] = StringValues.Empty;
         return Ok();

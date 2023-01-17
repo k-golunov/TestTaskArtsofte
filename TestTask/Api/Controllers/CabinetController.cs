@@ -36,7 +36,8 @@ public class CabinetController : Controller
     [Route("logout")]
     public IActionResult Logout()
     {
-        HttpContext.Response.Cookies.Delete("access_token"); 
+        // HttpContext.Response.Cookies.Delete("access_token");
+        HttpContext.Response.Cookies.Append("logout", "true");
         return RedirectToAction("Login", "Account");
     }
 }
