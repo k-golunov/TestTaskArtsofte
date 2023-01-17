@@ -1,11 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
 using Dal.Entities;
 using Dal.Interfaces;
 using Logic.Interfaces;
 using Logic.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Logic.Managers;
@@ -30,6 +32,7 @@ public class AccountManager : IAccountManager
     public AuthenticateResponse? Authenticate(LoginRequestModel model)
     {
         // hash password!
+        model.Password = GetHashPassword(model.Password);
         var user = _userRepository
             .GetAll()
             .FirstOrDefault(x => x.Phone == model.Phone && x.Password == model.Password);
@@ -54,12 +57,13 @@ public class AccountManager : IAccountManager
             return null;
         // hash password!
         var userModel = _mapper.Map<User>(model);
+        userModel.Password = GetHashPassword(model.Password);
         var addedUser = await _userRepository.AddAsync(userModel);
             
         var response = Authenticate(new LoginRequestModel
         {
             Phone = userModel.Phone,
-            Password = userModel.Password
+            Password = model.Password
         });
             
         return response;
@@ -103,5 +107,14 @@ public class AccountManager : IAccountManager
     public User GetByPhone(string phone) => _userRepository.GetByPhone(phone);
 
     public bool IsUseEmailOrPhone(string email, string phone) => _userRepository.GetByPhone(phone) == null && _userRepository.GetByEmail(email) == null;
-    
+
+    private string GetHashPassword(string password)
+    {
+        var bytes = Encoding.UTF8.GetBytes(password);
+        var hash = MD5.HashData(bytes);
+        var result = new StringBuilder();
+        foreach (var h in hash)
+            result.Append(h.ToString("x2"));
+        return result.ToString();
+    }
 }
