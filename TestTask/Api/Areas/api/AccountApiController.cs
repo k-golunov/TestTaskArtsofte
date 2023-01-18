@@ -31,10 +31,6 @@ public class AccountApiController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Register([FromBody]RegisterRequestModel model)
     {
-        // if (model.Password != model.PasswordConfirm)
-        // {
-        //     return BadRequest();
-        // }
         var user = _manager.GetByPhone(model.Phone);
         if (user != null)
         {
@@ -43,7 +39,7 @@ public class AccountApiController : ControllerBase
                 $"the user with phone {model.Phone} is already registered"));
         }
         var response = await _manager.Register(model);
-        return Ok(response);
+        return Ok();
     }
 
     /// <summary>

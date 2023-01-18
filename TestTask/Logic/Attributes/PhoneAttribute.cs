@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace Logic.Attributes;
 
+/// <summary>
+/// Check pgone on valid (starts with 7 and consists of digits)
+/// </summary>
 public class PhoneAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value)

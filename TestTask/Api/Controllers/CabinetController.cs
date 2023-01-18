@@ -31,6 +31,11 @@ public class CabinetController : Controller
         return View(cabinet);
     }
 
+    /// <summary>
+    /// logout user
+    /// add key logout in cookies for logout user in jwt middleware
+    /// </summary>
+    /// <returns>Redirect to page Login</returns>
     [Authorize]
     [HttpGet]
     [Route("logout")]

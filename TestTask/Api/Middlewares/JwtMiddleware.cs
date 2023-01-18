@@ -20,6 +20,7 @@ public class JwtMiddleware
     
     /// <summary>
     /// Check token in headers
+    /// Or cookies
     /// </summary>
     /// <param name="context"></param>
     /// <param name="accountManager">manager for user</param>
@@ -47,7 +48,6 @@ public class JwtMiddleware
 
         if (token != null)
             AttachUserToContext(context, accountManager, token);
-
         await _next(context);
     }
     
@@ -61,18 +61,7 @@ public class JwtMiddleware
     {
         try
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero,
-            }, out SecurityToken validatedToken);
-
-            var jwtToken = (JwtSecurityToken)validatedToken;
+            var jwtToken = GetJwtSecurityToken(token);
             var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "UserId").Value);
 
             var user = accountManager.GetById(userId);
@@ -100,15 +89,31 @@ public class JwtMiddleware
         {
             context.Response.Cookies.Delete("access_token");
             context.Response.Cookies.Delete("logout");
+            DeleteInvalidToken(token);
             return null;
         }
-
+        
         return token;
     }
 
+    /// <summary>
+    /// Delete invalid tokens in blacklist
+    /// </summary>
     private void DeleteInvalidToken(string token)
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = GetJwtSecurityToken(token);
+        if (DateTime.Now > jwtToken.ValidTo)
+            _blackList.Remove(token);
+    }
+
+    /// <summary>
+    /// Get JwtSecurity Token for get info without token 
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    private JwtSecurityToken GetJwtSecurityToken(string token)
+    { 
+        var tokenHandler = new JwtSecurityTokenHandler(); 
         var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
         tokenHandler.ValidateToken(token, new TokenValidationParameters
         {
@@ -116,10 +121,9 @@ public class JwtMiddleware
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
             ValidateAudience = false,
+            
             ClockSkew = TimeSpan.Zero,
         }, out SecurityToken validatedToken);
-        var jwtToken = (JwtSecurityToken)validatedToken;
-        if (DateTime.Now > jwtToken.ValidFrom)
-            _blackList.Remove(token);
+        return (JwtSecurityToken)validatedToken;
     }
 }

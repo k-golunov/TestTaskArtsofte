@@ -54,16 +54,6 @@ public class AccountController : Controller
             _logger.LogInformation("phone or email already used");
             return View(model);
         }
-            // HttpContext.User.AddIdentity(new ClaimsIdentity(response.AccessToken));
-        // HttpContext.Request.Headers["Authorization"] = "Bearer " + response.AccessToken;
-        // return RegisterSuccess(model.FIO);
-        // _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.AccessToken);
-        /*var baseAddress = new Uri("https://localhost:44319/");
-
-        using (var httpClient = new HttpClient {BaseAddress = baseAddress})
-        {
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + response.AccessToken);
-        }*/
         
         return RedirectToAction("RegisterSuccess", "Account", model);
     }
@@ -81,9 +71,16 @@ public class AccountController : Controller
         {
             _logger.LogInformation("one or more field is invalid");
             return View(model);
+            
         }
         var response = _manager.Authenticate(model);
-        // var a = HttpContext.Request.Cookies.TryGetValue("access_token", out var login);
+        // add message ошибка авторизации
+        if (response == null)
+        {
+            _logger.LogInformation("one or more field is invalid");
+            return View(model);
+        }
+        
         HttpContext.Response.Cookies.Append("access_token", response.AccessToken);
         return RedirectToAction("Cabinet", "Cabinet");
     }
@@ -95,11 +92,6 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Login()
     {
-        var baseAddress = new Uri("https://localhost:7075/");
-        using (var httpClient = new HttpClient {BaseAddress = baseAddress})
-        {
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer 1");
-        }
         return View();
     }
 

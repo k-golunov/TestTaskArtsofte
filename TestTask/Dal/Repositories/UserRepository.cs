@@ -11,10 +11,6 @@ public class UserRepository : IUserRepository
     {
         _context = context;
     }
-    public void Add(User user)
-    {
-        throw new NotImplementedException();
-    }
 
     public User? GetById(int id) => _context.Users.FirstOrDefault(u => u.Id == id);
     
